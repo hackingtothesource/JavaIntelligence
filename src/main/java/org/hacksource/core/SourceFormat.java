@@ -9,12 +9,13 @@ import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.stmt.*;
 
 
-import java.io.BufferedReader;
-import java.io.IOException;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Stream;
 
 import static com.github.javaparser.ParseStart.*;
 import static com.github.javaparser.Providers.provider;
@@ -48,25 +49,28 @@ public class SourceFormat {
 
     public static void main(String[] args) throws IOException {
 
-        StringBuilder sb = new StringBuilder();
-
         String path = SourceFormat.class.getResource("/example.java").getPath();
         path = path.substring(1);
 
-        try (BufferedReader br = Files.newBufferedReader(Paths.get(path))) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                sb.append(line).append("\n");
-            }
+        StringBuilder contentBuilder = new StringBuilder();
 
-        } catch (IOException e) {
+        try (Stream<String> stream = Files.lines(Paths.get(path), StandardCharsets.UTF_8)) {
+            stream.forEach(s -> contentBuilder.append(s).append("\n"));
+        }
+        catch (IOException e) {
             e.printStackTrace();
         }
 
+        String output = "";
         try {
-            System.out.println(format(sb.toString()));
+            output = format(contentBuilder.toString());
         } catch (SourceException e) {
             e.printStackTrace();
         }
+
+        FileWriter fileWriter = new FileWriter("generated/example.java");
+        fileWriter.write(output);
+        fileWriter.close();
+
     }
 }
