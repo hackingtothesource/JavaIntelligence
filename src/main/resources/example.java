@@ -1,21 +1,24 @@
-package Graph;
+package
+        Graph;
 
 import java.util.LinkedList;
 
-public class Graph {
 
-    private final int V;private int E;   private LinkedList<Integer>[] adj;
+public class  Graph {
+
+    private final   int V;private int E ;
+             private LinkedList<Integer>[] adj;
 
     public Graph(int V)
     {
         this.V=V;
         this.E=0;
-        adj = (LinkedList<Integer>[]) new LinkedList[V];
-        for (int v = 0; v < V; v++)
-            adj[v] = new LinkedList<>();
+        adj =    (LinkedList  <Integer>[  ]) new LinkedList[   V];
+        for (int v =0; v<    V; v  ++)
+            adj[v] = new  LinkedList<>();
     }
 
-    public int V()
+    public int V(    )
     {
 
 
@@ -25,24 +28,24 @@ public class Graph {
 
     public
     int E() {
-        return E;
+            return  E;
     }
 
     public void addEdge(int v, int w) {
-        adj[v].add(w);
-        adj[w].add(v);
-        E++;
+        adj[v].add( w);
+        adj[w ].add(v );
+        E ++ ;
     }
 
-    public LinkedList<Integer> adj(int v) {
+    public LinkedList<  Integer> adj(int v) {
         return adj[v];
     }
 
-    public int degree(int v,Graph g){
+    public    int degree(  int v,Graph g)    {
         int count = 0;
-        for(int s : adj(v))
+        for(int s : adj(v)  )
             count++;
-        return count;
-    }
+            return count;
+        }
 
 }
