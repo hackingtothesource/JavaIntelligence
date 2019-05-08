@@ -1,6 +1,5 @@
 package org.hacksource.core;
 
-import com.github.javaparser.Range;
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
