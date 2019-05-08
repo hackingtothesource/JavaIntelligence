@@ -1,32 +1,20 @@
 package org.hacksource.core;
 
-import com.github.javaparser.JavaParser;
-import com.github.javaparser.ParseResult;
-
+import com.github.javaparser.Range;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.stmt.*;
 
-
 import java.io.*;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Stream;
 
-import static com.github.javaparser.ParseStart.*;
-import static com.github.javaparser.Providers.provider;
 
 public class SourceFormat {
 
-    public static String format(String source) throws SourceException {
-        JavaParser javaParser = new JavaParser();
-        ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider(source));
-
-        CompilationUnit cu = result.getResult().orElseThrow(() -> new SourceException(result.getProblems()));
+    public static String format(CompilationUnit cu) {
 
         Arrays.stream(new Class[]{
                 IfStmt.class, ForStmt.class, ForEachStmt.class, WhileStmt.class
@@ -42,31 +30,19 @@ public class SourceFormat {
                 Statement block = (Statement)children.get(children.size() - 1);
                 if(!block.isBlockStmt()) {
                     stmt.replace(block, new BlockStmt(new NodeList<Statement>(block)));
+                    Range range = stmt.getRange().orElseThrow(() -> new RuntimeException("cannot get range"));
+                    System.out.println(range.toString());
                 }
             }
         });
     }
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, SourceException {
 
         String path = SourceFormat.class.getResource("/example.java").getPath();
         path = path.substring(1);
 
-        StringBuilder contentBuilder = new StringBuilder();
-
-        try (Stream<String> stream = Files.lines(Paths.get(path), StandardCharsets.UTF_8)) {
-            stream.forEach(s -> contentBuilder.append(s).append("\n"));
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        String output = "";
-        try {
-            output = format(contentBuilder.toString());
-        } catch (SourceException e) {
-            e.printStackTrace();
-        }
+        String output = format(SourceParser.parseFile(Paths.get(path)));
 
         FileWriter fileWriter = new FileWriter("generated/example.java");
         fileWriter.write(output);
