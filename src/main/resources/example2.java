@@ -4,18 +4,18 @@ import java.util.LinkedList;
 
 public class Graph {
 
-    private final int V;
+    private final int V, X;
 
     private int E;
 
     private LinkedList<Integer>[] adj;
 
-    public Graph(int V) {
-        this.V = V;
-        this.E = 0;
-        adj = (LinkedList<Integer>[]) new LinkedList[V];
-        for (int v = 0; v < V; v++) {
-            adj[v] = new LinkedList<>();
+    public Graph(int ver_num) {
+        V = ver_num;
+        E = 0;
+        adj = (LinkedList<Integer>[]) new LinkedList[ver_num];
+        for (int i = 0; i < ver_num; i++) {
+            adj[i] = new LinkedList<>();
         }
     }
 
@@ -27,14 +27,14 @@ public class Graph {
         return E;
     }
 
-    public void addEdge(int v, int w) {
-        adj[v].add(w);
-        adj[w].add(v);
+    public void addEdge(int a, int b) {
+        adj[a].add(b);
+        adj[b].add(a);
         E++;
     }
 
-    public LinkedList<Integer> adj(int v) {
-        return adj[v];
+    public LinkedList<Integer> adj(int x) {
+        return adj[x];
     }
 
     public int degree(int Vertex, Graph g) {

@@ -8,6 +8,7 @@ import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.NameExpr;
+import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
@@ -19,6 +20,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class SourceNaming {
 
@@ -30,17 +33,20 @@ public class SourceNaming {
             ResolvedValueDeclaration rne = ne.resolve();
 
             Node node = null;
-            if(rne instanceof JavaParserSymbolDeclaration) {
+            if (rne instanceof JavaParserSymbolDeclaration) {
                 node = ((JavaParserSymbolDeclaration)rne).getWrappedNode();
             }
             else if (rne instanceof JavaParserFieldDeclaration) {
-                node = ((JavaParserFieldDeclaration)rne).getWrappedNode();
+                FieldDeclaration field = ((JavaParserFieldDeclaration)rne).getWrappedNode();
+                node = field.getVariables().stream()
+                        .filter(d -> d.getName().equals(ne.getName()))
+                        .findFirst().orElseThrow(() -> new RuntimeException("cannot find field"));
             }
             else if (rne instanceof JavaParserParameterDeclaration) {
                 node = ((JavaParserParameterDeclaration)rne).getWrappedNode();
             }
 
-            if(symbolMap.containsKey(node)) {
+            if (symbolMap.containsKey(node)) {
                 symbolMap.get(node).add(ne);
             }
             else {
@@ -52,38 +58,61 @@ public class SourceNaming {
         });
 
         symbolMap.forEach((k, v) -> {
-            if(k instanceof FieldDeclaration) {
-                // TODO
-            }
-            else if(k instanceof Parameter) {
-                // TODO
-            }
-            else if(k instanceof VariableDeclarator){
-                // local vars
-                if(k.getChildNodes().size() >= 2) {
-                    Node child = k.getChildNodes().get(1);
+            if (k.getChildNodes().size() >= 2) {
+                Node child = k.getChildNodes().get(1);
 
-                    fixNameToLower(child.toString()).ifPresent(name -> {
-                        ((VariableDeclarator)k).setName(name);
+                fixNameToLower(child.toString()).ifPresent(name -> {
+                    if (symbolMap.entrySet().stream().noneMatch(x -> // filter out all of node with conflict
+                        ((NodeWithSimpleName)x.getKey()).getName().toString().equals(name)
+                    )) {
+                        ((NodeWithSimpleName) k).setName(name);
 
                         for (Node n : v) {
-                            ((NameExpr)n).setName(name);
+                            ((NameExpr) n).setName(name);
                         }
 
                         TokenRange tokenRange = k.getTokenRange().orElseThrow(() -> new RuntimeException("cannot get range"));
-                        list.add(new SourceProblem("s5.2.7-local-variable-names", tokenRange));
-                    });
-                }
+
+                        if (k instanceof VariableDeclarator) {
+                            Node p = k.getParentNode().orElse(null);
+                            if (p instanceof FieldDeclaration) {
+                                list.add(new SourceProblem("s5.2.5-non-constant-field-names", tokenRange));
+                            } else {
+                                list.add(new SourceProblem("s5.2.7-local-variable-names", tokenRange));
+                            }
+
+                        } else if (k instanceof Parameter) {
+                            list.add(new SourceProblem("s5.2.6-parameter-names", tokenRange));
+                        }
+                    }
+                });
             }
         });
     }
 
     private static Optional<String> fixNameToLower(String name) {
-        if(name.charAt(0) >= 'A' && name.charAt(0) <= 'Z') {
-            return Optional.of(name.substring(0, 1).toLowerCase() + name.substring(1));
+        StringBuffer result = new StringBuffer(name);
+
+        // first char
+        if (result.charAt(0) >= 'A' && result.charAt(0) <= 'Z') {
+            result.setCharAt(0, Character.toLowerCase(result.charAt(0)));
         }
 
-        else return Optional.empty();
+        // underline to camel
+        Matcher m = Pattern.compile("_[a-z]").matcher(result);
+        StringBuffer sb = new StringBuffer();
+        while (m.find()) {
+            m.appendReplacement(sb, m.group().replace("_","").toUpperCase());
+        }
+        m.appendTail(sb);
+        result = sb;
+
+        if(result.toString().equals(name)) {
+            return Optional.empty();
+        }
+        else {
+            return Optional.of(result.toString());
+        }
     }
 
     public static void main(String[] args) throws IOException, SourceException {
