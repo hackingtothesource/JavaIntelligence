@@ -1,5 +1,6 @@
 package org.hacksource.core;
 
+import com.github.javaparser.Problem;
 import com.github.javaparser.ast.CompilationUnit;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -37,7 +38,12 @@ public class IntelligenceCLI {
 
         } catch (SourceException e) {
             resultMap.put("success", false);
-            resultMap.put("error", e.getMessage());
+
+            List<String> problems = new ArrayList<>();
+            for(Problem p : e.getProblems()) {
+                problems.add(p.toString());
+            }
+            resultMap.put("error", problems);
         }
 
         Gson gson = new GsonBuilder().create();

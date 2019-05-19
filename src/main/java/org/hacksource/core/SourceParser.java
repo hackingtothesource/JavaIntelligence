@@ -5,6 +5,7 @@ import com.github.javaparser.ParseResult;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 
 import java.io.IOException;
@@ -27,6 +28,10 @@ public class SourceParser {
         javaParser.getParserConfiguration().setSymbolResolver(symbolSolver);
 
         ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider(source));
+
+        if (!result.getProblems().isEmpty()) {
+            throw new SourceException(result.getProblems());
+        }
 
         CompilationUnit cu = result.getResult().orElseThrow(() -> new SourceException(result.getProblems()));
 

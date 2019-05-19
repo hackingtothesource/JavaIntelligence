@@ -11,6 +11,7 @@ import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserFieldDeclaration;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserSymbolDeclaration;
@@ -30,7 +31,14 @@ public class SourceNaming {
         Map<Node, List<Node>> symbolMap = new HashMap<>();
 
         cu.findAll(NameExpr.class).forEach(ne -> {
-            ResolvedValueDeclaration rne = ne.resolve();
+            ResolvedValueDeclaration rne = null;
+            try {
+                rne = ne.resolve();
+            }
+            catch (UnsolvedSymbolException e){
+                // TODO some warning here
+                return;
+            }
 
             Node node = null;
             if (rne instanceof JavaParserSymbolDeclaration) {
