@@ -1,47 +1,33 @@
-package Graph;
+class IfElseDemo {
+    public static void main(String[] args) {
 
-import java.util.LinkedList;
+        int testscore = 76;
+        char grade;
 
-public class Graph {
-
-    private final int V;
-
-    private int E;
-
-    private LinkedList<Integer>[] adj;
-
-    public Graph(int V) {
-        this.V = V;
-        this.E = 0;
-        adj = (LinkedList<Integer>[]) new LinkedList[V];
-        for (int v = 0; v < V; v++) {
-            adj[v] = new LinkedList<>();
+        if (testscore >= 90) {
+            grade = 'A';
+        } else if (testscore >= 80) {
+            grade = 'B';
+        } else if (testscore >= 70) {
+            grade = 'C';
+        } else if (testscore >= 60) {
+            grade = 'D';
+        } else {
+            grade = 'F';
         }
-    }
 
-    public int V() {
-        return V;
-    }
+        System.out.println("Grade = " + grade);
 
-    public int E() {
-        return E;
-    }
+        boolean isFailed = grade == 'F';
 
-    public void addEdge(int v, int w) {
-        adj[v].add(w);
-        adj[w].add(v);
-        E++;
-    }
-
-    public LinkedList<Integer> adj(int v) {
-        return adj[v];
-    }
-
-    public int degree(int v, Graph g) {
-        int count = 0;
-        for (int s : adj(v)) {
-            count++;
+        if (grade == 'A' || grade == 'B') {
+            System.out.println("Good!");
+        } else if (isfailed && (isFailed || testscore < 50) && testscore < 50) {
+            System.out.println("Fatal failed.");
         }
-        return count;
+
+        if (isFailed) {
+            System.out.println("Your parents will be invited to the school.");
+        }
     }
 }
