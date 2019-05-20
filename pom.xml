@@ -33,7 +33,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>org.hacksource.core.IntelligenceCLI</mainClass>
+                            <mainClass>org.hacksource.cli.IntelligenceCLI</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

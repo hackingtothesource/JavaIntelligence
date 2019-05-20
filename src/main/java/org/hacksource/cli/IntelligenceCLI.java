@@ -1,9 +1,10 @@
-package org.hacksource.core;
+package org.hacksource.cli;
 
 import com.github.javaparser.Problem;
 import com.github.javaparser.ast.CompilationUnit;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import org.hacksource.core.*;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -25,6 +26,7 @@ public class IntelligenceCLI {
             List<SourceProblem> problemList = new ArrayList<>();
             SourceFormat.format(cu, problemList);
             SourceNaming.naming(cu, problemList);
+            SourceStructureTransform.transform(cu, problemList);
 
             resultMap.put("success", true);
             resultMap.put("originCode", input);
