@@ -28,7 +28,9 @@ src/main/resources包中的 example.java、example2.java、example3.java
 
 #### 三、快速开始
 
-进入http://www.kaqiz.cn，如图所示，左面输入代码，点击Run后，右边则给出重构后的代码，前端并提供了几个示例代码（下拉列表框实例代码处）。
+进入：http://www.kaqiz.cn
+
+如图所示，左面输入代码，点击Run后，右边则给出重构后的代码，前端并提供了几个示例代码（下拉列表框实例代码处）。
 
 ![1559824984009](./doc/imgs/1559824984009.png)
 
