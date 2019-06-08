@@ -12,7 +12,7 @@
 
 ![1559541834496](http://git.imtwice.cn:1024/HackingToTheSource/JavaIntelligence/src/dev/doc/imgs/1559541834496.png)
 
-![1559542086663](.\imgs\1559542086663.png)
+![1559542086663](http://git.imtwice.cn:1024/HackingToTheSource/JavaIntelligence/src/dev/doc\imgs\1559542086663.png)
 
 ###### 命令行交互类：
 
@@ -38,29 +38,29 @@ src/main/resources包中的 example.java、example2.java、example3.java
 
 **测试1（代码格式重构）：**
 
-![1559825333032](.\imgs\1559825333032.png)
+![1559825333032](http://git.imtwice.cn:1024/HackingToTheSource/JavaIntelligence/src/dev/doc\imgs\1559825333032.png)
 
 
 
-![1559825360854](.\imgs\1559825360854.png)
+![1559825360854](http://git.imtwice.cn:1024/HackingToTheSource/JavaIntelligence/src/dev/doc\imgs\1559825360854.png)
 
 如上图所示，左面为输入的测试代码，右边为运行后重构的代码，运行后会将代码不规范的地方高亮显示，并定位到具体格式有问题的行与列，在最上方给出具体的规范说明（部分空行，空格只进行更正不进行高亮提示以及规范说明）。重构后，正确率在99%以上，包括不得省略花括号、换行、空白、表达式圆括号等。
 
 **测试2（特定类型命名重构）：**
 
-![1559825796754](.\imgs\1559825796754.png)
+![1559825796754](http://git.imtwice.cn:1024/HackingToTheSource/JavaIntelligence/src/dev/doc\imgs\1559825796754.png)
 
-![1559825825060](.\imgs\1559825825060.png)
+![1559825825060](http://git.imtwice.cn:1024/HackingToTheSource/JavaIntelligence/src/dev/doc\imgs\1559825825060.png)
 
-![1559826028653](.\imgs\1559826028653.png)
+![1559826028653](http://git.imtwice.cn:1024/HackingToTheSource/JavaIntelligence/src/dev/doc\imgs\1559826028653.png)
 
 如上图所示，对于命名不规范（不遵循lowerCamelCase）的变量，运行后，定位到命名不规范变量的位置并高亮显示，在上方给出具体的分析说明，右边则为重构后的代码。重构后，命名正确率在99%以上，包括：包命名，类命名，方法命名，常量命名，成员变量命名，参数命名，局部变量命名等。
 
 **测试3（等价语句互转）：**
 
-![1559826912432](.\imgs\1559826912432.png)
+![1559826912432](http://git.imtwice.cn:1024/HackingToTheSource/JavaIntelligence/src/dev/doc\imgs\1559826912432.png)
 
-![1559826945001](.\imgs\1559826945001.png)
+![1559826945001](http://git.imtwice.cn:1024/HackingToTheSource/JavaIntelligence/src/dev/doc\imgs\1559826945001.png)
 
 如上图所示，根据给定的代码规范，对于多条件单if语句/单条件多if互转语句，for/while互转，多if/switch互转等，实现不满足结构规范的代码，对其结构自动重构，会将代码不规范的地方高亮显示，并定位到结构规范有问题的行与列，在最上方给出具体的规范说明，重构后，结构正确率在99%以上。
 
