@@ -4,6 +4,7 @@ import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.BinaryExpr;
+import com.github.javaparser.ast.expr.BooleanLiteralExpr;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.stmt.*;
 
@@ -27,6 +28,35 @@ public class SourceStructureTransform {
     }
 
     public static void transferForToWhile(ForStmt stmt, List<SourceProblem> list) {
+        NodeList<Expression> init = stmt.getInitialization();
+        Optional<Expression> compare = stmt.getCompare();
+        NodeList<Expression> update = stmt.getUpdate();
+
+        Statement body = stmt.getBody();
+
+        BlockStmt newStmt = new BlockStmt();
+        init.stream().map(e -> new ExpressionStmt(e)).forEach(s -> newStmt.addStatement(s));
+
+        BlockStmt whileBody = null;
+        if (body.isBlockStmt()) {
+            whileBody = body.asBlockStmt();
+        }
+        else {
+            whileBody = new BlockStmt();
+            whileBody.addStatement(body);
+        }
+
+        for (Expression e : update) {
+            whileBody.addStatement(new ExpressionStmt(e));
+        }
+
+        WhileStmt whileStmt = new WhileStmt(compare.orElse(new BooleanLiteralExpr(true)), whileBody);
+        newStmt.addStatement(whileStmt);
+
+        TokenRange tokenRange = stmt.getTokenRange().orElseThrow(() -> new RuntimeException("cannot get range"));
+        list.add(new SourceProblem("t-transferForToWhile", tokenRange));
+
+        stmt.replace(newStmt);
     }
 
     public static void transferSwitchToIf(SwitchStmt stmt, List<SourceProblem> list) {

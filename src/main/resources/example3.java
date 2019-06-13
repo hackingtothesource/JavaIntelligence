@@ -43,5 +43,9 @@ class IfElseDemo {
         if (isFailed) {
             System.out.println("Your parents will be invited to the school.");
         }
+
+        for(int i = 0, j = 0; i < 10; i++, j++) {
+            System.out.println(i);
+        }
     }
 }
