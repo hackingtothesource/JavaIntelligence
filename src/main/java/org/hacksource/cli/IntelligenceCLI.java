@@ -11,6 +11,20 @@ import java.util.*;
 
 public class IntelligenceCLI {
     public static void main(String[] args) {
+        for (String arg : args) {
+            switch (arg) {
+                case "--expandSingleIf":
+                    SourceStructureTransform.doExpandSingleIf = true;
+                    break;
+                case "--transferSwitchToIf":
+                    SourceStructureTransform.doTransferSwitchToIf = true;
+                    break;
+                case "--transferForToWhile":
+                    SourceStructureTransform.doTransferForToWhile = true;
+                    break;
+            }
+        }
+
         StringBuffer input = new StringBuffer();
         Scanner scanner = new Scanner(System.in);
         while (scanner.hasNextLine()) {

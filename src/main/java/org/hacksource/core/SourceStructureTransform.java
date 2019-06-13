@@ -15,10 +15,14 @@ import java.util.Optional;
 
 public class SourceStructureTransform {
 
+    public static boolean doExpandSingleIf = false;
+    public static boolean doTransferSwitchToIf = false;
+    public static boolean doTransferForToWhile = false;
+
     public static void transform(CompilationUnit cu, List<SourceProblem> list) {
-        cu.findAll(IfStmt.class).forEach(s -> expandSingleIf(s));
-        cu.findAll(SwitchStmt.class).forEach(s -> transferSwitchToIf(s));
-        cu.findAll(ForStmt.class).forEach(s -> transferForToWhile(s));
+        if (doExpandSingleIf) cu.findAll(IfStmt.class).forEach(s -> expandSingleIf(s));
+        if (doTransferSwitchToIf) cu.findAll(SwitchStmt.class).forEach(s -> transferSwitchToIf(s));
+        if (doTransferForToWhile) cu.findAll(ForStmt.class).forEach(s -> transferForToWhile(s));
     }
 
     public static void transferForToWhile(ForStmt stmt) {
