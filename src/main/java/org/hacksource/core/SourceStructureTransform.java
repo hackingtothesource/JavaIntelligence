@@ -1,5 +1,6 @@
 package org.hacksource.core;
 
+import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.BinaryExpr;
@@ -20,15 +21,15 @@ public class SourceStructureTransform {
     public static boolean doTransferForToWhile = false;
 
     public static void transform(CompilationUnit cu, List<SourceProblem> list) {
-        if (doExpandSingleIf) cu.findAll(IfStmt.class).forEach(s -> expandSingleIf(s));
-        if (doTransferSwitchToIf) cu.findAll(SwitchStmt.class).forEach(s -> transferSwitchToIf(s));
-        if (doTransferForToWhile) cu.findAll(ForStmt.class).forEach(s -> transferForToWhile(s));
+        if (doExpandSingleIf) cu.findAll(IfStmt.class).forEach(s -> expandSingleIf(s, list));
+        if (doTransferSwitchToIf) cu.findAll(SwitchStmt.class).forEach(s -> transferSwitchToIf(s, list));
+        if (doTransferForToWhile) cu.findAll(ForStmt.class).forEach(s -> transferForToWhile(s, list));
     }
 
-    public static void transferForToWhile(ForStmt stmt) {
+    public static void transferForToWhile(ForStmt stmt, List<SourceProblem> list) {
     }
 
-    public static void transferSwitchToIf(SwitchStmt stmt) {
+    public static void transferSwitchToIf(SwitchStmt stmt, List<SourceProblem> list) {
         Expression selector = stmt.getSelector();
         NodeList<SwitchEntryStmt> entries = stmt.getEntries();
         IfStmt newStmt = null;
@@ -81,10 +82,13 @@ public class SourceStructureTransform {
             }
         }
 
+        TokenRange tokenRange = stmt.getTokenRange().orElseThrow(() -> new RuntimeException("cannot get range"));
+        list.add(new SourceProblem("t-transferSwitchToIf", tokenRange));
+
         stmt.replace(newStmt);
     }
 
-    public static void expandSingleIf(IfStmt stmt) {
+    public static void expandSingleIf(IfStmt stmt, List<SourceProblem> list) {
 
         Expression cond = stmt.getCondition();
 
@@ -115,8 +119,11 @@ public class SourceStructureTransform {
             }
 
             if (newIf != null) {
+                TokenRange tokenRange = stmt.getTokenRange().orElseThrow(() -> new RuntimeException("cannot get range"));
+                list.add(new SourceProblem("t-expandSingleIf", tokenRange));
+                
                 stmt.replace(newIf);
-                newIf.findAll(IfStmt.class).forEach(s -> expandSingleIf(s));
+                newIf.findAll(IfStmt.class).forEach(s -> expandSingleIf(s, list));
             }
         }
     }
