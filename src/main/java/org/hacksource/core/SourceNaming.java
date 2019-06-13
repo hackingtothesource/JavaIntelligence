@@ -66,6 +66,10 @@ public class SourceNaming {
         });
 
         symbolMap.forEach((k, v) -> {
+            // TODO why is there possibly null?
+            if (k == null) {
+                return;
+            }
             if (k.getChildNodes().size() >= 2) {
                 Node child = k.getChildNodes().get(1);
 
