@@ -24,18 +24,35 @@ public class SourceFormat {
         return cu.toString();
     }
 
+    private static void addBlock(Statement stmt, Statement block, List<SourceProblem> list) {
+        stmt.replace(block, new BlockStmt(new NodeList<>(block)));
+
+        TokenRange tokenRange = stmt.getTokenRange().orElseThrow(() -> new RuntimeException("cannot get range"));
+        list.add(new SourceProblem("s4.1.1-braces-always-used", tokenRange));
+    }
+
     private static <T extends Statement> void addStmtBracket(CompilationUnit cu, Class<T> c, List<SourceProblem> list) {
         cu.findAll(c).forEach(stmt -> {
             List<Node> children = stmt.getChildNodes();
 
             if(children.size() != 0) {
-                Statement block = (Statement)children.get(children.size() - 1);
+                if (stmt.isIfStmt()) {
+                    Statement thenBlock = stmt.asIfStmt().getThenStmt();
+                    Statement elseBlock = stmt.asIfStmt().getElseStmt().orElse(null);
 
-                if(!block.isBlockStmt()) {
-                    stmt.replace(block, new BlockStmt(new NodeList<>(block)));
+                    if(!thenBlock.isBlockStmt()) {
+                        addBlock(stmt, thenBlock, list);
+                    }
+                    if(elseBlock != null && !elseBlock.isIfStmt() && !elseBlock.isBlockStmt()) {
+                        addBlock(stmt, elseBlock, list);
+                    }
 
-                    TokenRange tokenRange = stmt.getTokenRange().orElseThrow(() -> new RuntimeException("cannot get range"));
-                    list.add(new SourceProblem("s4.1.1-braces-always-used", tokenRange));
+                } else {
+                    Statement block = (Statement) children.get(children.size() - 1);
+
+                    if(!block.isBlockStmt()) {
+                        addBlock(stmt, block, list);
+                    }
                 }
             }
         });
