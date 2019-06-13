@@ -119,9 +119,11 @@ public class SourceStructureTransform {
             }
 
             if (newIf != null) {
-                TokenRange tokenRange = stmt.getTokenRange().orElseThrow(() -> new RuntimeException("cannot get range"));
-                list.add(new SourceProblem("t-expandSingleIf", tokenRange));
-                
+                TokenRange tokenRange = stmt.getTokenRange().orElse(null);
+                if (tokenRange != null) {
+                    list.add(new SourceProblem("t-expandSingleIf", tokenRange));
+                }
+
                 stmt.replace(newIf);
                 newIf.findAll(IfStmt.class).forEach(s -> expandSingleIf(s, list));
             }
@@ -129,6 +131,10 @@ public class SourceStructureTransform {
     }
 
     public static void main(String[] args) throws IOException, SourceException {
+        doExpandSingleIf = true;
+        doTransferForToWhile = true;
+        doTransferSwitchToIf = true;
+
         String path = SourceFormat.class.getResource("/example3.java").getPath();
         path = path.substring(1);
 
