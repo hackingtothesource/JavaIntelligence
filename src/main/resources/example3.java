@@ -26,6 +26,20 @@ class IfElseDemo {
             System.out.println("Fatal failed.");
         }
 
+        switch (grade) {
+            case 'A':
+                break;
+            case 'B':
+                System.out.println("hi");
+                break;
+            case 'C':
+                System.out.println("hello");
+                break;
+            default:
+                System.out.println("how are you");
+                break;
+        }
+
         if (isFailed) {
             System.out.println("Your parents will be invited to the school.");
         }
