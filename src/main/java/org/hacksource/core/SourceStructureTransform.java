@@ -22,7 +22,6 @@ public class SourceStructureTransform {
     }
 
     public static void transferForToWhile(ForStmt stmt) {
-        
     }
 
     public static void transferSwitchToIf(SwitchStmt stmt) {
