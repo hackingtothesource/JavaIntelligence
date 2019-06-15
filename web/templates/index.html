@@ -1,0 +1,184 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>在线使用 JavaIntelligence </title>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+        <!-- 新 Bootstrap 核心 CSS 文件 -->
+<link href="https://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- 可选的Bootstrap主题文件（一般不使用） -->
+<script src="https://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap-theme.min.css"></script>
+
+<!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+<script src="https://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
+
+<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+<script src="https://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	    <script src="{% static 'node_modules/monaco-editor/min/vs/loader.js' %}"></script>
+    <script src={% static 'node_modules/jquery/dist/jquery.min.js' %}></script>
+    <script src="{% static 'kaqiz_js/kaqiz_js.js' %}"></script>
+<style type="text/css">
+    body,button, input, select, textarea,h1 ,h2, h3, h4, h5, h6 { font-family: Microsoft YaHei,'宋体' , Tahoma, Helvetica, Arial, "\5b8b\4f53", sans-serif;}
+    .myGlyphMarginClass {
+	background: red;
+}
+.myContentClass {
+	background: rgba(230, 115, 27, 0.31);
+}
+
+</style>
+    <script>
+        window.decorations = [];
+    </script>
+
+<script>
+    //获取浏览器页面可见高度和宽度
+var _PageHeight = document.documentElement.clientHeight,
+  _PageWidth = document.documentElement.clientWidth;
+//计算loading框距离顶部和左部的距离（loading框的宽度为215px，高度为61px）
+var _LoadingTop = _PageHeight > 61 ? (_PageHeight - 61) / 2 : 0,
+  _LoadingLeft = _PageWidth > 215 ? (_PageWidth - 215) / 2 : 0;
+//在页面未加载完毕之前显示的loading Html自定义内容
+
+var _LoadingHtml = " <style type=\"text/css\">\n" +
+        "body {\n" +
+        "  background: white;\n" +
+        "}\n" +
+        "\n" +
+        ".loading {\n" +
+        "  position: absolute;\n" +
+        "  left: 50%;\n" +
+        "  top: 50%;\n" +
+        "  margin: -60px 0 0 -60px;\n" +
+        "  background: #fff;\n" +
+        "  width: 100px;\n" +
+        "  height: 100px;\n" +
+        "  border-radius: 100%;\n" +
+        "  border: 10px solid #19bee1;\n" +
+        "}\n" +
+        ".loading:after {\n" +
+        "  content: '';\n" +
+        "  background: trasparent;\n" +
+        "  width: 140%;\n" +
+        "  height: 140%;\n" +
+        "  position: absolute;\n" +
+        "  border-radius: 100%;\n" +
+        "  top: -20%;\n" +
+        "  left: -20%;\n" +
+        "  opacity: 0.7;\n" +
+        "  box-shadow: rgba(127,128,124,0.6) -4px -5px 3px -3px;\n" +
+        "  animation: rotate 2s infinite linear;\n" +
+        "}\n" +
+        "\n" +
+        "@keyframes rotate {\n" +
+        "  0% {\n" +
+        "    transform: rotateZ(0deg);\n" +
+        "  }\n" +
+        "  100% {\n" +
+        "    transform: rotateZ(360deg);\n" +
+        "  }\n" +
+        "}\n" +
+        "</style>\n" +
+        "<div class=\"loading\" id=\"loadingDiv\" ></div>";
+//呈现loading效果
+document.write(_LoadingHtml);
+//window.onload = function () {
+//  var loadingMask = document.getElementById('loadingDiv');
+//  loadingMask.parentNode.removeChild(loadingMask);
+//};
+//监听加载状态改变
+document.onreadystatechange = completeLoading;
+//加载状态为complete时移除loading效果
+function completeLoading() {
+  if (document.readyState == "complete") {
+ var loadingMask = document.getElementById('loadingDiv');
+ loadingMask.parentNode.removeChild(loadingMask);
+  }
+}
+</script>
+
+</head>
+
+<body>
+
+		<div class="col-md-12 column">
+			<nav class="navbar navbar-default" role="navigation">
+				<div class="navbar-header">
+					 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"> <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button> <a class="navbar-brand" href="#">JavaIntelligence</a>
+				</div>
+
+				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+					<ul class="nav navbar-nav">
+
+						<li class="dropdown">
+							 <a href="#" class="dropdown-toggle" data-toggle="dropdown">示例代码<strong class="caret"></strong></a>
+							<ul class="dropdown-menu">
+								<li>
+									 <a href="#" onclick="get_example1();return false;">格式化</a>
+								</li>
+								<li>
+									 <a href="#" onclick="get_example2();return false;">变量重命名</a>
+								</li>
+								<li>
+									 <a href="#" onclick="get_example3();return false;">if switch 互换实例</a>
+								</li>
+                                <li>
+									 <a href="#" onclick="get_example4();return false;">for while 互换实例</a>
+								</li>
+                                <li>
+									 <a href="#" onclick="get_example5();return false;">for while 互换实例2</a>
+								</li>
+
+							</ul>
+						</li>
+					</ul>
+						<div class="form-group">
+                        <button style="margin-top: 10px" type="submit" class="btn btn-default" onclick="beauty()">Run</button>
+
+                        <div style="margin-top: 10px">
+                       <label  class="checkbox-inline">
+                           <input type="checkbox" id="choose1" value="option1"> 展开if语句条件
+                       </label>
+                         <label class="checkbox-inline">
+                            <input type="checkbox" id="choose2" value="option2"> switch转if
+                        </label>
+                        <label  class="checkbox-inline">
+                        <input type="checkbox" id="choose3" value="option3"> for转while
+                        </label>
+                            </div>
+                            </div>
+
+				</div>
+
+			</nav>
+            <div class="col-md-12 column">
+            <div class="row clearfix">
+                <div id="problems">
+				</div>
+
+            </div>
+            </div>
+
+            <div class="col-md-12 column">
+
+
+            </div>
+
+			<div class="row clearfix">
+				<div class="col-md-6 column">
+                    {{ core_editor |safe}}
+				</div>
+
+				<div class="col-md-6 column">
+                    {{ core_editor_beauty |safe}}
+				</div>
+			</div>
+
+            <div id="loading"></div>
+
+		</div>
+
+</body>
+</html>

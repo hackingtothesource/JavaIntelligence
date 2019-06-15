@@ -1,0 +1,50 @@
+<html>
+
+<head>
+
+<link href="https://cdn.bootcss.com/codemirror/5.46.0/codemirror.css" rel="stylesheet">
+<script src="https://cdn.bootcss.com/codemirror/5.46.0/codemirror.js"></script>
+<link href="https://cdn.bootcss.com/codemirror/5.46.0/theme/3024-night.css" rel="stylesheet">
+</head>
+
+<body>
+
+    <textarea id="code" name="code">http://www.cnblogs.com/oldphper</textarea>
+
+    <script>
+
+        var editor = CodeMirror.fromTextArea(document.getElementById("code"), {  // 标识到textarea
+
+            value : "http://www.cnblogs.com/oldphper",  // 文本域默认显示的文本
+
+            mode : "text/html",  // 模式
+
+             theme : "3024-night",  // CSS样式选择
+
+            indentUnit : 2,  // 缩进单位，默认2
+
+            smartIndent : true,  // 是否智能缩进
+
+            tabSize : 4,  // Tab缩进，默认4
+
+            readOnly : false,  // 是否只读，默认false
+
+            showCursorWhenSelecting : true,
+
+            lineNumbers : true , // 是否显示行号
+
+            matchBrackets: true,
+
+             autoCloseBrackets: true,
+
+            showHint: true,
+
+            // .. 还有好多，翻译不完。需要的去看http://codemirror.net/doc/manual.html#config
+
+        });
+
+    </script>
+
+</body>
+
+</html>

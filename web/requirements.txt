@@ -1,0 +1,3 @@
+Python                 3.7.0
+Django                 2.2.1
+pyquery                1.4.0

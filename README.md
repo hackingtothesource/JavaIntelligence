@@ -51,7 +51,7 @@
 ### 三、快速开始
 
 #### 在线环境（推荐）
-进入 http://www.kaqiz.cn 即可使用
+进入 https://www.kaqiz.cn 即可使用
 
 注：
 - 第一次加载可能较慢，请耐心等待
@@ -64,7 +64,7 @@
 #### 本机搭建
 1. 使用 Maven 或打开 IntelliJ IDEA 构建项目，生成 jar 包
 1. 如果不想搭建 Web 在线平台，则可直接运行 jar 包（注：主类为 `org.hacksource.cli.IntelligenceCLI`），而后在标准输入中输入代码，得到返回的 json 数据（不太直观，推荐通过 Web 平台查看可视化结果）；若想搭建 Web 平台则按照下面的步骤
-1. 将在 demo 目录下的 django 项目部署到本机或服务器上，运行此项目
+1. 将在 web 目录下的 django 项目部署到本机或服务器上，运行此项目
 
 ### 四、测试
 
