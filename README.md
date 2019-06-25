@@ -98,7 +98,10 @@
 
 ### 五、开发者
 
-刘明阳、陈嘉宁、宋国伟
+- PragmaTwice: 静态分析/重构算法
+- kaqiz: Web前后端
+- guido-miracle: 文档
+
 
 ### 六、总结讨论
 
