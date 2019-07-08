@@ -98,8 +98,8 @@
 
 ### 五、开发者
 
-- 静态分析/重构算法: @PragmaTwice (maintainer)
-- Web前后端: @kaqiz @PragmaTwice
+- 静态分析/重构算法: @PragmaTwice
+- Web前后端: @kaqiz(负责人) @PragmaTwice
 - 文档: @guido-miracle
 
 
