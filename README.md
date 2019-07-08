@@ -98,9 +98,9 @@
 
 ### 五、开发者
 
-- PragmaTwice: 静态分析/重构算法
-- kaqiz: Web前后端
-- guido-miracle: 文档
+- 静态分析/重构算法: @PragmaTwice (maintainer)
+- Web前后端: @kaqiz @PragmaTwice
+- 文档: @guido-miracle
 
 
 ### 六、总结讨论
