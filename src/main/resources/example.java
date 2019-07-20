@@ -8,7 +8,14 @@ public class  Graph {
 
     private final   int V;private int E ;
              private LinkedList<Integer>[]  adj;
-
+    public String bar(String string) {
+        // should be &&
+        if (string!=null || !string.equals(""))
+            return string;
+        // should be ||
+        if (string==null && string.equals(""))
+            return string;
+    }
     public Graph(int     V)
     {
         this.V= V;

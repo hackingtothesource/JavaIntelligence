@@ -20,6 +20,7 @@ public class SourceStructureTransform {
     public static boolean doExpandSingleIf = false;
     public static boolean doTransferSwitchToIf = false;
     public static boolean doTransferForToWhile = false;
+    public static boolean usePMD = false;
 
     public static void transform(CompilationUnit cu, List<SourceProblem> list) {
         if (doExpandSingleIf) cu.findAll(IfStmt.class).forEach(s -> expandSingleIf(s, list));
