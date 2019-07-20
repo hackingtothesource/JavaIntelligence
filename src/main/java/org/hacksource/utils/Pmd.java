@@ -51,6 +51,6 @@ return problemStrings;
 
 @Test
 public void test(){
-    Exc("D:\\JavaEEworkplace\\SoftwareContest\\pmd-bin-6.16.0\\bin","test.java");
+    Exc(".\\pmd-bin-6.16.0\\bin","test.java");
 }
 }
