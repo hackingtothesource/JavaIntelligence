@@ -98,9 +98,9 @@
 
 ### 五、开发者
 
-- 静态分析/重构算法: @PragmaTwice
+- 静态分析/重构算法: @PragmaTwice(负责人) @kaqiz @coderigenius
 - Web前后端: @kaqiz(负责人) @PragmaTwice
-- 文档: @guido-miracle
+- 文档: @guido-miracle @PragmaTwice
 
 
 ### 六、总结讨论
