@@ -178,7 +178,7 @@ JavaSymbolSolver 分析 AST 并对每一个符号加入链接到声明位置的�
 
 - 静态分析/重构算法: @PragmaTwice(负责人) @kaqiz @coderigenius
 - Web前后端: @kaqiz(负责人) @PragmaTwice
-- 文档: @guido-miracle @PragmaTwice
+- 文档: @guido-miracle(负责人) @PragmaTwice
 
 
 ### 六、总结讨论
