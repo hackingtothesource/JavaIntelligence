@@ -25,6 +25,7 @@ public class SourceProblem {
         return getTokenRange().toRange().orElseThrow(() -> new RuntimeException("cannot get range"));
     }
 
+    @Override
     public String toString() {
         return getRange().toString() + ":" + codeStyleTag;
     }
