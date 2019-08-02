@@ -5,23 +5,30 @@
     <meta charset="UTF-8">
     <title>在线使用 JavaIntelligence </title>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-
+        <!-- 新 Bootstrap 核心 CSS 文件 -->
 <link href="https://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
 
+<!-- 可选的Bootstrap主题文件（一般不使用） -->
 <script src="https://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap-theme.min.css"></script>
 
+<!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
 <script src="https://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
 
+<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
 <script src="https://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
-<script src="{% static 'node_modules/monaco-editor/min/vs/loader.js' %}"></script>
-<script src="{% static 'kaqiz_js/kaqiz_js.js' %}"></script>
-
+	    <script src="{% static 'node_modules/monaco-editor/min/vs/loader.js' %}"></script>
+    <script src={% static 'node_modules/jquery/dist/jquery.min.js' %}></script>
+    <script src="{% static 'kaqiz_js/kaqiz_js.js' %}"></script>
 <style type="text/css">
     body,button, input, select, textarea,h1 ,h2, h3, h4, h5, h6 { font-family: Microsoft YaHei,'宋体' , Tahoma, Helvetica, Arial, "\5b8b\4f53", sans-serif;}
     .myGlyphMarginClass {
 	background: red;
+
 }
+    @font-face {
+        font-family: 'DigitalNumbers';
+        src: url({% static 'DigitalNumbers-Regular.woff' %}) format('woff');
+    }
 .myContentClass {
 	background: rgba(230, 115, 27, 0.31);
 }
@@ -102,12 +109,39 @@ function completeLoading() {
 <body>
 
 		<div class="col-md-12 column">
+
 			<nav class="navbar navbar-default" role="navigation">
 				<div class="navbar-header">
-					 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"> <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button> <a class="navbar-brand" href="#">JavaIntelligence</a>
+					 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"> <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button> <a class="navbar-brand" href="#">JavaIntelligence+</a>
 				</div>
 
 				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                               <ul class="nav navbar-nav navbar-right" style="margin-top: 0;" >
+            <div class="col-md-12 column">
+                  <div class="row clearfix">
+                      <p style="font-size:36px;margin-top: 10px;margin-right: 10px; font-family: DigitalNumbers"   id="scores"></p>
+                                        <form class="form-inline" style="margin-right: 5px " action="{% url "download_report"  %}" method="get" id="download4">
+
+                            </form>
+                      <form class="form-inline" action="{% url "upload"  %}" method="post"  enctype="multipart/form-data">
+                         {% csrf_token %}
+
+
+                          <div class="form-group"  id="download2">
+
+                          </div>
+                         </form>
+
+                        <form class="form-inline"  action="{% url "download"  %}" method="get" id="download3">
+
+                        </form>
+
+
+
+                    </div>
+
+            </div>
+                           </ul>
 					<ul class="nav navbar-nav">
 
 						<li class="dropdown">
@@ -128,14 +162,45 @@ function completeLoading() {
                                 <li>
 									 <a href="#" onclick="get_example5();return false;">for while 互换实例2</a>
 								</li>
+                                  <li>
+									 <a href="#" onclick="get_example6();return false;">空指针异常处理</a>
+								</li>
+                                          <li>
+									 <a href="#" onclick="get_example7();return false;">空指针异常处理2</a>
+								</li>
+
+							</ul>
+						</li>
+
+                        <li class="dropdown">
+							 <a href="#" class="dropdown-toggle" data-toggle="dropdown" id="language">选择语言(Java)<strong class="caret" ></strong></a>
+							<ul class="dropdown-menu">
+								<li>
+									 <a href="#" onclick="change_java();return false;">Java</a>
+								</li>
+								<li>
+									 <a href="#" onclick="change_python();return false;">Python</a>
+								</li>
+
+
 
 							</ul>
 						</li>
 					</ul>
 						<div class="form-group">
-                        <button style="margin-top: 10px" type="submit" class="btn btn-default" onclick="beauty()">Run</button>
+                            <div class="form-inline">
+                            <button style="margin-top: 10px" type="submit" class="btn btn-default" onclick="beauty()">Run</button>
+                            <button style="margin-top: 10px" type="submit" class="btn btn-default" onclick="startdownload()">批量</button>
 
-                        <div style="margin-top: 10px">
+
+                            </div>
+
+
+                             <div style="margin-top: 10px" id="opchoosef">
+                        <div style="margin-top: 10px" id="opchoose">
+                            <label  class="checkbox-inline">
+                           <input type="checkbox" id="choose0" value="option0"> 生成分析报告
+                       </label>
                        <label  class="checkbox-inline">
                            <input type="checkbox" id="choose1" value="option1"> 展开if语句条件
                        </label>
@@ -145,10 +210,16 @@ function completeLoading() {
                         <label  class="checkbox-inline">
                         <input type="checkbox" id="choose3" value="option3"> for转while
                         </label>
+
+                             </div>
+
                             </div>
-                            </div>
+                        </div>
+
 
 				</div>
+
+
 
 			</nav>
             <div class="col-md-12 column">
@@ -156,13 +227,11 @@ function completeLoading() {
                 <div id="problems">
 				</div>
 
+
             </div>
             </div>
 
-            <div class="col-md-12 column">
 
-
-            </div>
 
 			<div class="row clearfix">
 				<div class="col-md-6 column">

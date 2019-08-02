@@ -1,15 +1,8 @@
 from pyquery import PyQuery as pq
-import  re
 
 def get_help(doc_id):
 
     doc_id = doc_id.replace(".","\.")
-    if('pmd-' in doc_id):
-        ans2 = doc_id.split('-')[1]
-        ans2 = ans2.replace('test\.java','')
-        ans2 = ans2.replace('\.', '')
-        return ans2
-
     #print(doc_id)
     with open('help.html','r',encoding='utf-8') as file:
         html = file.read()
@@ -34,5 +27,5 @@ def get_help(doc_id):
         else:
             return ans
 
-# ans = get_help('#s4\.6\.1-vertical-whitespace')
-# print(ans)
+ans = get_help('#s4.1.2-blocks-k-r-style')
+print(ans)

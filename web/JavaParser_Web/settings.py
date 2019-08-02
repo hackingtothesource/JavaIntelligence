@@ -23,9 +23,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '0057rkm#d!-j)hrn+mmoyj^scq5mq0j9x5ppz6^x5--4)gkb%&'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['16395on917.iask.in','127.0.0.1','192.168.43.222','123.206.52.19','www.kaqiz.cn']
+ALLOWED_HOSTS = ['16395on917.iask.in','127.0.0.1','192.168.43.222','parser.iqust.top','192.168.43.119']
 
 
 # Application definition
@@ -123,3 +123,10 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (
 os.path.join(BASE_DIR, "static"),
 )
+
+UPLOAD_URL = '/upload/'
+UPLOAD_ROOT = os.path.join(BASE_DIR, 'upload')
+UPLOAD_DIR = (
+    ('upload', os.path.join(UPLOAD_ROOT, 'upload').replace('\\', '/')),
+)
+

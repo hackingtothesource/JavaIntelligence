@@ -22,4 +22,8 @@ urlpatterns = [
     path('test_index/', views.test_index),
     path('beauty/', views.beautiful_core),
     path('get_help/', views.get_help_hint),
+
+    path('acceptfiles/', views.acceptfiles,name='upload'),
+    path('download/',views.file_download,name='download'),
+    path('download_report/',views.file_download_report,name='download_report'),
 ]

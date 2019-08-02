@@ -1,3 +1,141 @@
+function change_java() {
+    window.python_choose = false;
+     var loc = document.getElementById("opchoosef");
+     var lung = document.getElementById("language");
+     lung.innerText = "选择语言(Java)"
+     loc.innerHTML = "                     <div style=\"margin-top: 10px\" id=\"opchoose\">\n" +
+         "                <label  class=\"checkbox-inline\">\n" +
+         "                           <input type=\"checkbox\" id=\"choose0\" value=\"option0\"> 生成分析报告\n" +
+         "                       </label>"+
+        "                       <label  class=\"checkbox-inline\">\n" +
+        "                           <input type=\"checkbox\" id=\"choose1\" value=\"option1\"> 展开if语句条件\n" +
+        "                       </label>\n" +
+        "                         <label class=\"checkbox-inline\">\n" +
+        "                            <input type=\"checkbox\" id=\"choose2\" value=\"option2\"> switch转if\n" +
+        "                        </label>\n" +
+        "                        <label  class=\"checkbox-inline\">\n" +
+        "                        <input type=\"checkbox\" id=\"choose3\" value=\"option3\"> for转while\n" +
+        "                        </label>";
+    }
+function change_python() {
+    $("#editor1").children().remove();
+        //init monaco
+        require.config({
+            paths: { 'vs': '../static/node_modules/monaco-editor/min/vs' }, 'vs/nls': {
+                availableLanguages: {
+                    '*': 'zh-cn'
+                }
+            }
+        });
+        require(['vs/editor/editor.main'], function () {
+
+    editor_1 = monaco.editor.create(document.getElementById("editor1"), {
+	value: `core_value`,
+	language: "python",
+	lineNumbers: "on",
+	roundedSelection: true,
+	scrollBeyondLastLine: true,
+	readOnly: false,
+	theme: "vs-dark",
+	automaticLayout: true,
+	glyphMargin: true,
+});
+
+
+
+
+        });
+    $("#editor2").children().remove();
+        //init monaco
+        require.config({
+            paths: { 'vs': '../static/node_modules/monaco-editor/min/vs' }, 'vs/nls': {
+                availableLanguages: {
+                    '*': 'zh-cn'
+                }
+            }
+        });
+        require(['vs/editor/editor.main'], function () {
+
+    editor_2 = monaco.editor.create(document.getElementById("editor2"), {
+	value: `core_value`,
+	language: "python",
+	lineNumbers: "on",
+	roundedSelection: true,
+	scrollBeyondLastLine: true,
+	readOnly: true,
+	theme: "vs-dark",
+	automaticLayout: true,
+	glyphMargin: true,
+});
+
+
+
+
+        });
+
+ var child = document.getElementById("opchoose");
+ // child.parentNode.removeChild(child);
+      var lung = document.getElementById("language");
+     lung.innerText = "选择语言(Python)";
+
+     child.innerHTML = "                     <div style=\"margin-top: 10px\" id=\"opchoose\">\n" +
+         "                <label  class=\"checkbox-inline\">\n" +
+         "                           <input type=\"checkbox\" id=\"choose0\" value=\"option0\"> 生成分析报告\n" +
+         "                       </label>";
+
+ window.python_choose = true;
+ var tmp = "import os\n" +
+     "import subprocess, shlex, json\n" +
+     "\n" +
+     "def beauty_dirlog(root_deep):\n" +
+     "    for root,dirs,files in os.walk(root_deep):\n" +
+     "        for file in files:\n" +
+     "\n" +
+     "            if('.java' in file):\n" +
+     "                #获取文件所属目录\n" +
+     "                print(root)\n" +
+     "                #获取文件路径\n" +
+     "                path = (os.path.join(root,file))\n" +
+     "                print(path)\n" +
+     "                command = 'java -cp JavaIntelligence.jar org.hacksource.cli.IntelligenceCLI'\n" +
+     "                print(command)\n" +
+     "\n" +
+     "                args = shlex.split(command)\n" +
+     "                p = subprocess.Popen(args, stdin=open(path, 'r'), stdout=subprocess.PIPE)\n" +
+     "                p.wait()\n" +
+     "\n" +
+     "                return_json  = (json.loads(str(p.stdout.read(), encoding='utf-8')))\n" +
+     "\n" +
+     "                if(return_json['success'] == False):\n" +
+     "                    beauty_code = json.dumps(return_json['error']).split('Problem stacktrace')[0]\n" +
+     "                    with open(os.path.join(root_deep,'error_list.txt'), 'a+') as file:\n" +
+     "                        file.write(path + '\\n')\n" +
+     "\n" +
+     "                else:\n" +
+     "                    beauty_code = (return_json['fixedCode'])\n" +
+     "                    # print(beauty_code)\n" +
+     "\n" +
+     "                with open(path,'w') as file:\n" +
+     "                    file.write(beauty_code)\n" +
+     "\n" +
+     "\n";
+     editor_1.setValue(tmp);
+}
+
+function startdownload() {
+    var loc = document.getElementById("download2");
+    loc.innerHTML = "                    <label for=\"f12\" class=\" btn btn-default\" style=\"margin-top: 10px;\"'>请上传您选择的源文件</label>\n" +
+        "                               <input type=\"file\"  name=\"fafafa\" id=\"f12\"  style=\"display:none\">\n" +
+        "                              <input type=\"submit\" value=\"一键生成\" class=\"btn btn-primary\" style=\"margin-top: 10px;\">";
+    // var loc2 = document.getElementById("download3");
+    // loc2.innerHTML = "<input type=\"submit\"  class=\"btn btn-primary\" id=\"f13\" value=\"下载转换文件\"  style=\"margin-top: 5px;\">";
+}
+
+function startdownloadreport() {
+    var loc2 = document.getElementById("download4");
+    loc2.innerHTML = "<input type=\"submit\"  class=\"btn btn-primary\" id=\"f14\" value=\"下载报告\"  style=\"margin-top: 5px;\">";
+}
+
 function getPhrases(text, wordsPerPhrase) {
   var words = text.split(/\s+/);
   var result = [];
@@ -7,10 +145,24 @@ function getPhrases(text, wordsPerPhrase) {
   return result
 }
 
+
 function beauty() {
-    var choose1 = document.getElementById("choose1").checked;
+
+    try {
+                    var choose0 = document.getElementById("choose0").checked;
+            var choose1 = document.getElementById("choose1").checked;
     var choose2 = document.getElementById("choose2").checked;
     var choose3 = document.getElementById("choose3").checked;
+    }
+    catch (e) {
+        
+    }
+    if(choose0){
+                var loc3 = document.getElementById("download4");
+                loc3.innerHTML = "";
+            }
+    // var choose4 = document.getElementById("choose4").checked;
+    var choose4 = window.python_choose;
     try {
            // for ( var i = 0; i <window.decorations.length; i++){
            //  decorations = editor_1.deltaDecorations(window.decorations[i], []);
@@ -22,7 +174,7 @@ function beauty() {
 }
 
     //jquery天下第一
-     var data = {core: editor_1.getValue(),choose1:choose1,choose2:choose2,choose3:choose3};
+    var data = {core: editor_1.getValue(),choose1:choose1,choose2:choose2,choose3:choose3,choose4:choose4};
             showdiv =document.getElementById("problems");
         showdiv.innerHTML = "";
         loading = document.getElementById("loading")
@@ -53,7 +205,7 @@ function beauty() {
         "  top: -20%;\n" +
         "  left: -20%;\n" +
         "  opacity: 0.7;\n" +
-        "  box-shadow: rgba(255, 255, 255, 0.6) -4px -5px 3px -3px;\n" +
+        "  box-shadow: rgba(127,128,124,0.6) -4px -5px 3px -3px;\n" +
         "  animation: rotate 2s infinite linear;\n" +
         "}\n" +
         "\n" +
@@ -68,18 +220,31 @@ function beauty() {
         "</style>\n" +
         "<div class=\"loading\"></div>";
 $.ajax({
-    url: '/beauty/',
+    url: '/editor/beauty/',
     type: 'POST',
     data: data,
     dataType: 'json',
     success: function(result) {
                 loading = document.getElementById("loading");
     loading.innerHTML = "";
-        //console.log(result);
-        var status = JSON.parse(result).success;
+        console.log(result);
+        try
+        {
+            var status = JSON.parse(result).success;
+        }
+        catch(err){
+     var status = result.success;
+}
+
         if (status == false)
         {
-            var error_text = JSON.parse(result).error[0];
+            try {
+                 var error_text = JSON.parse(result).error[0];
+            }
+           catch (e) {
+                                var error_text = result.error[0];
+
+           }
             //console.log(error_text);
             var line = error_text.split(' ')[1].split(',')[0];
             console.log(line);
@@ -88,7 +253,23 @@ $.ajax({
             // var tmp = error_text.split(')')[1];
             var tmp = error_text;
             tmp = getPhrases(tmp, 6).join('\n');
+
+            var score = '0';
+
+            var html2 = `<font size="3" face="Times" color="red">`;
+            document.getElementById("scores").innerHTML= html2 + "代码得分:" + "</font>" +score+html2+"分"+ "</font>";
             editor_2.setValue(tmp);
+
+            if(choose0)
+            {
+                startdownloadreport();
+            }
+            else{
+                var loc2 = document.getElementById("download4");
+                loc2.innerHTML = "";
+            }
+
+
 var decorations = editor_1.deltaDecorations([], [
 	{
 		range: new monaco.Range(line,1,line,1),
@@ -101,34 +282,75 @@ var decorations = editor_1.deltaDecorations([], [
 
 ]);
 	window.decorations.push(decorations);
-            //alert("代码有致命错�?);
+            //alert("代码有致命错误");
         }
         else
         {
 
+            try {
+                var beauty_code = (JSON.parse(result).fixedCode);
+            }
+            catch(err)
+            {
+                var beauty_code = result.fixedCode;
+            }
 
-            var beauty_code = (JSON.parse(result).fixedCode);
-            var arr = JSON.parse(result).problems;
+            try {
+                var arr = JSON.parse(result).problems;
+            }
+            catch (e) {
+                var arr = result.problems;
+            }
             
-            arr.sort(function(a,b){
-                var pos = a.split(':')[0];
-                var pos2 = b.split(':')[0];
-                var line = pos.split(' ')[1].split(',')[0];
-                var line2 = pos2.split(' ')[1].split(',')[0];
-                return  line-line2;
-            });
-             console.log('����֮��Ϊ'+arr);
-             
+            try {
+
+
+                arr.sort(function (a, b) {
+                    var pos = a.split(':')[0];
+                    var pos2 = b.split(':')[0];
+                    var line = pos.split(' ')[1].split(',')[0];
+                    var line2 = pos2.split(' ')[1].split(',')[0];
+                    return line - line2;
+                });
+                console.log('排序之后为' + arr);
+
+            }
+            catch (e) {
+                
+            }
+            var len = arr.length;
+            if(len == 0)
+            {
+                var score = 100.0;
+            }
+            else {
+                var score = 100 - 5 * len - Math.round(Math.random() * 2 * 10) / 10;
+            }
+            var html1 = `<font size="3" face="Times" color="red">`;
+            document.getElementById("scores").innerHTML= html1 + "代码得分:" + "</font>" +score+html1+"分"+ "</font>";
              for ( var i = 0; i <arr.length; i++){
                    var problems = arr[i];
                    var pos = problems.split(':')[0];
                    var id = problems.split(':')[1];
                    console.log(pos,id);
-                   get_help(pos,id);
+                   try {
+                       get_help(pos,id);
+                   }
+                   catch (e) {
+                       
+                   }
             }
 
 
             editor_2.setValue(beauty_code);
+                    if(choose0)
+            {
+                startdownloadreport();
+            }
+                             else{
+                var loc3 = document.getElementById("download4");
+                loc3.innerHTML = "";
+            }
             //alert("美化成功");
         }
 
@@ -140,10 +362,10 @@ function get_help(pos,id) {
     var data = {help_id : '#'+id};
     console.log(data);
 $.ajax({
-    url: '/get_help/',
+    url: '/editor/get_help/',
     type: 'POST',
     data: data,
-    async: false,      //ajaxͬ��
+    async: false,      //ajax同步
     success: function(result) {
         var line = pos.split(' ')[1].split(',')[0];
         var line2 = pos.split(' ')[3].split(',')[0];
@@ -165,12 +387,32 @@ $.ajax({
         // showdiv.setAttribute("class","alert alert-warning alert-dismissible")
         // showdiv.setAttribute("role","alert")
         // showdiv.innerHTML = showdiv.innerHTML + pos + "<br>" + result;
-        showdiv.innerHTML = showdiv.innerHTML + "<div class=\"alert alert-success alert-dismissible\" role=\"alert\" >"  + "<b>" + pos + "</b>" + "<br>" + result + "</div>"
+        showdiv.innerHTML = showdiv.innerHTML + "<div class=\"alert alert-success alert-dismissible\" role=\"alert\" >"  + "<b>" + pos + "</b>"+ "<br>" + result + "</div>"
 
         console.log(result);
     }
 })
 }
+
+
+//以下是废弃的axois
+    // var editor1_text = editor_1.getValue();
+    //     axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
+    //     axios.post('/editor/beauty/',{
+    //         core:editor1_text,
+    //         headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+    //     })
+    // // var send = `core=` + editor1_text;
+    // // axios.post('/editor/beauty/',send)
+    //     .then(function (response) {
+    //         // var class_info = response.data.fixedCode;
+    //         console.log(response.data);
+    //
+    //     })
+    //     .catch(function (error) {
+    //         console.log(error);
+    //     });
+
 function get_example1() {
     var tmp = "package\n" +
         "        Graph;\n" +
@@ -371,8 +613,7 @@ function get_example4() {
 }
 
 function get_example5() {
-        var tmp = "package cn.migu.newportal.activity.service.activity;\n" +
-        "\n" +
+    var tmp = "package cn.migu.newportal.activity.service.activity;\n" +
         "import java.util.ArrayList;\n" +
         "import java.util.LinkedList;\n" +
         "import java.util.List;\n" +
@@ -381,21 +622,21 @@ function get_example5() {
         "{\n" +
         "    public static void main(String[] args)\n" +
         "    {\n" +
-        "        \n" +
-        "        \n" +
+        "\n" +
+        "\n" +
         "        List<Integer> arrayList = new ArrayList<Integer>();\n" +
-        "       \n" +
+        "\n" +
         "        List<Integer> linkList = new LinkedList<Integer>();\n" +
-        "        \n" +
-        "        \n" +
+        "\n" +
+        "\n" +
         "        for (int i = 0; i < 100000; i++)\n" +
         "        {\n" +
         "            arrayList.add(i);\n" +
         "            linkList.add(i);\n" +
         "        }\n" +
-        "        \n" +
+        "\n" +
         "        int array = 0;\n" +
-        "        \n" +
+        "\n" +
         "        long arrayForStartTime = System.currentTimeMillis();\n" +
         "        for (int i = 0; i < arrayList.size(); i++)\n" +
         "        {\n" +
@@ -403,17 +644,12 @@ function get_example5() {
         "        }\n" +
         "        long arrayForEndTime = System.currentTimeMillis();\n" +
         "        System.out.println(\"cal\" + (arrayForEndTime - arrayForStartTime) + \"ms\");\n" +
-        "        \n" +
-        "        //foreach arrayList\n" +
         "        long arrayForeachStartTime = System.currentTimeMillis();\n" +
-        "        for (Integer in : arrayList)\n" +
-        "        {\n" +
-        "            array = in;\n" +
-        "        }\n" +
+        "\n" +
         "        long arrayForeachEndTime = System.currentTimeMillis();\n" +
-        "        System.out.println(\"foreach arrayList\" + (arrayForeachEndTime - arrayForeachStartTime) + \"ms\");\n" +
-        "        \n" +
-        "        // for linkList\n" +
+        "        System.out.println(\"foreach arrayList:\" + (arrayForeachEndTime - arrayForeachStartTime) + \"ms\");\n" +
+        "\n" +
+        "\n" +
         "        long linkForStartTime = System.currentTimeMillis();\n" +
         "        int link = 0;\n" +
         "        for (int i = 0; i < linkList.size(); i++)\n" +
@@ -422,35 +658,138 @@ function get_example5() {
         "        }\n" +
         "        long linkForEndTime = System.currentTimeMillis();\n" +
         "        System.out.println(\"for linkList\" + (linkForEndTime - linkForStartTime) + \"ms\");\n" +
-        "        \n" +
-        "        //froeach linkList\n" +
+        "\n" +
+        "\n" +
         "        long linkForeachStartTime = System.currentTimeMillis();\n" +
-        "        for (Integer in : linkList)\n" +
-        "        {\n" +
-        "            link = in;\n" +
-        "        }\n" +
+        "\n" +
         "        long linkForeachEndTime = System.currentTimeMillis();\n" +
-        "        System.out.println(\"foreach linkList ms\" + (linkForeachEndTime - linkForeachStartTime) + \"ms\");\n" +
+        "        System.out.println(\"foreach linkList ms:\" + (linkForeachEndTime - linkForeachStartTime) + \"ms\");\n" +
         "    }\n" +
         "}\n";
     editor_1.setValue(tmp);
 
 }
 
-//以下是废弃的axois
-    // var editor1_text = editor_1.getValue();
-    //     axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
-    //     axios.post('/beauty/',{
-    //         core:editor1_text,
-    //         headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-    //     })
-    // // var send = `core=` + editor1_text;
-    // // axios.post('/beauty/',send)
-    //     .then(function (response) {
-    //         // var class_info = response.data.fixedCode;
-    //         console.log(response.data);
-    //
-    //     })
-    //     .catch(function (error) {
-    //         console.log(error);
-    //     });
+function get_example6() {
+    var tmp = "package\n" +
+        "        Graph;\n" +
+        "\n" +
+        "import java. util .LinkedList;\n" +
+        "\n" +
+        "\n" +
+        "public class  Graph {\n" +
+        "\n" +
+        "    private final   int V;private int E ;\n" +
+        "             private LinkedList<Integer>[]  adj;\n" +
+        "    public String bar(String string) {\n" +
+        "        // should be &&\n" +
+        "        if (string!=null || !string.equals(\"\"))\n" +
+        "            return string;\n" +
+        "        // should be ||\n" +
+        "        if (string==null && string.equals(\"\"))\n" +
+        "            return string;\n" +
+        "    }\n" +
+        "    public Graph(int     V)\n" +
+        "    {\n" +
+        "        this.V= V;\n" +
+        "        this.E=0;\n" +
+        "        adj =    (LinkedList  <Integer>[  ]) new LinkedList[   V];\n" +
+        "        for (int v =0; v<    V; v  ++)\n" +
+        "            adj[v  ] = new  LinkedList<  >();\n" +
+        "    }\n" +
+        "\n" +
+        "        public int V(    )\n" +
+        "        {\n" +
+        "\n" +
+        "\n" +
+        "\n" +
+        "            return V;\n" +
+        "        }\n" +
+        "\n" +
+        "    public\n" +
+        "    int E() {\n" +
+        "                return  E;\n" +
+        "    }\n" +
+        "\n" +
+        "    public void addEdge(int v, int w) {\n" +
+        "           adj[v].add( w);\n" +
+        "        adj[w ].add(v );\n" +
+        "        E ++ ;\n" +
+        "    }\n" +
+        "\n" +
+        "    public LinkedList<  Integer> adj(int v) {\n" +
+        "        return adj[v]\n" +
+        "                ;\n" +
+        "    }\n" +
+        "\n" +
+        "    public    int degree(  int v,Graph g)    {\n" +
+        "        int count =   0;\n" +
+        "        for(int s :   adj(v)  )\n" +
+        "            count++ ;\n" +
+        "            return  count;\n" +
+        "        }\n" +
+        "\n" +
+        "}";
+    editor_1.setValue(tmp);
+
+}
+function get_example7() {
+    var tmp = "class IfElseDemo {\n" +
+        " class Foo {\n" +
+        "\tvoid bar() {\n" +
+        "\t\tif (a.equals(baz) && a != null) {}\n" +
+        "\t\t}\n" +
+        "}\n" +
+        "    public static void main(String[] args) {\n" +
+        "\n" +
+        "        int testscore = 76;\n" +
+        "        char grade;\n" +
+        "\n" +
+        "        if (testscore >= 90) {\n" +
+        "            grade = 'A';\n" +
+        "        } else if (testscore >= 80) {\n" +
+        "            grade = 'B';\n" +
+        "        } else if (testscore >= 70) {\n" +
+        "            grade = 'C';\n" +
+        "        } else if (testscore >= 60) {\n" +
+        "            grade = 'D';\n" +
+        "        } else {\n" +
+        "            grade = 'F';\n" +
+        "        }\n" +
+        "\n" +
+        "        System.out.println(\"Grade = \" + grade);\n" +
+        "\n" +
+        "        boolean isFailed = grade == 'F';\n" +
+        "\n" +
+        "        if (grade == 'A' || grade == 'B') {\n" +
+        "            System.out.println(\"Good!\");\n" +
+        "        } else if (isfailed && (isFailed || testscore < 50) && testscore < 50) {\n" +
+        "            System.out.println(\"Fatal failed.\");\n" +
+        "        }\n" +
+        "\n" +
+        "        switch (grade) {\n" +
+        "            case 'A':\n" +
+        "                break;\n" +
+        "            case 'B':\n" +
+        "                System.out.println(\"hi\");\n" +
+        "                break;\n" +
+        "            case 'C':\n" +
+        "                System.out.println(\"hello\");\n" +
+        "                break;\n" +
+        "            default:\n" +
+        "                System.out.println(\"how are you\");\n" +
+        "                break;\n" +
+        "        }\n" +
+        "\n" +
+        "        if (isFailed) {\n" +
+        "            System.out.println(\"Your parents will be invited to the school.\");\n" +
+        "        }\n" +
+        "\n" +
+        "        for(int i = 0, j = 0; i < 10; i++, j++) {\n" +
+        "            System.out.println(i);\n" +
+        "        }\n" +
+        "    }\n" +
+        "}";
+    editor_1.setValue(tmp);
+
+}
